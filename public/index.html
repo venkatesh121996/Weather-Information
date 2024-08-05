@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Information Service</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            margin-top: 20px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Weather Information Service</h1>
+        <form id="weather-form">
+            <input type="text" id="city" placeholder="Enter Location Name" required>
+            <button type="submit">Get Weather</button>
+        </form>
+        <div class="result" id="weather-result"></div>
+    </div>
+
+    <script>
+        document.getElementById('weather-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const city = document.getElementById('city').value;
+
+            try {
+                const response = await fetch(`/weather?city=${city}`);
+                const data = await response.json();
+
+                if (data.error) {
+                    document.getElementById('weather-result').textContent = data.error;
+                } else {
+                    document.getElementById('weather-result').textContent = `The weather in ${data.location} is ${data.weather_descriptions} with a temperature of ${data.temperature}°C.`;
+                }
+            } catch (error) {
+                document.getElementById('weather-result').textContent = 'Failed to fetch weather data';
+            }
+        });
+    </script>
+</body>
+</html>
